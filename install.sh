@@ -23,5 +23,14 @@ mkdir -p "$TARGET_DIR"
 cp -r "$SCRIPT_DIR"/. "$TARGET_DIR"/
 chmod +x "$TARGET_DIR"/cli.sh "$TARGET_DIR"/hooks/scripts/*.sh
 
-echo "Installed to $TARGET_DIR"
-echo "Enable it in Claude Code: /plugin install lolo-token-optimizer (or restart Claude Code if plugins auto-load from ~/.claude/plugins)."
+echo "Copied to $TARGET_DIR (kept for manual inspection / cli.sh use)."
+echo
+echo "This copy alone does NOT activate the plugin. Claude Code loads plugins"
+echo "through a marketplace registration. Run inside a Claude Code session:"
+echo
+echo "  /plugin marketplace add $SCRIPT_DIR"
+echo "  /plugin install lolo-token-optimizer"
+echo
+echo "(Or, for the published repo: /plugin marketplace add mastertarace/lolo-token-optimizer)"
+echo "For quick local testing without registering a marketplace, you can also run:"
+echo "  claude --plugin-dir $SCRIPT_DIR"

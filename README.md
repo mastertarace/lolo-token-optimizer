@@ -91,17 +91,36 @@ points); run it directly from a shell for troubleshooting:
 
 ## Installation
 
-```bash
-./install.sh
+Claude Code activates plugins through a marketplace registration — a plain
+copy into `~/.claude/plugins/` is not enough by itself. This repo's root
+`.claude-plugin/marketplace.json` makes it a self-contained, single-plugin
+marketplace, so no separate listing repo is needed.
+
+**From the published repo**, inside a Claude Code session:
+
+```
+/plugin marketplace add mastertarace/lolo-token-optimizer
+/plugin install lolo-token-optimizer
 ```
 
-This copies the plugin into `~/.claude/plugins/lolo-token-optimizer/` and
-marks the hook scripts executable. It will ask for confirmation before
-overwriting an existing install at that path.
+**From a local clone**, inside a Claude Code session:
 
-After installing, enable the plugin in Claude Code (e.g. `/plugin install
-lolo-token-optimizer`, or restart Claude Code if it auto-loads plugins from
-`~/.claude/plugins`).
+```
+/plugin marketplace add /path/to/lolo-token-optimizer
+/plugin install lolo-token-optimizer
+```
+
+**Quick local testing** without registering a marketplace at all:
+
+```bash
+claude --plugin-dir /path/to/lolo-token-optimizer
+```
+
+`./install.sh` additionally copies the repo into
+`~/.claude/plugins/lolo-token-optimizer/` and marks the hook scripts
+executable — convenient for running `cli.sh` or inspecting the installed
+copy, but it does not by itself register or activate the plugin; still run
+one of the `/plugin` commands above afterward.
 
 ## Verifying it works
 

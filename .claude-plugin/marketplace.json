@@ -1,0 +1,13 @@
+{
+  "name": "lolo-token-optimizer",
+  "owner": {
+    "name": "mastertarace"
+  },
+  "plugins": [
+    {
+      "name": "lolo-token-optimizer",
+      "source": ".",
+      "description": "Dynamically optimizes token usage, blocks raw reads of oversized files, and cuts off subagent retry loops after repeated failures."
+    }
+  ]
+}
