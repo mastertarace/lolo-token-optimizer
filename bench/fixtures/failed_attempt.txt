@@ -1,0 +1,10 @@
+tool_use: Bash
+command: pytest tests/test_orders.py -k test_checkout_flow
+
+tool_result (error):
+ImportError while loading conftest.py.
+tests/conftest.py:12: in <module>
+    from app.orders.service import OrdersService
+app/orders/service.py:4: in <module>
+    from app.billing.gateway import BillingGateway
+ModuleNotFoundError: No module named 'app.billing.gateway'

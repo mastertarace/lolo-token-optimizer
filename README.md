@@ -152,6 +152,16 @@ one of the `/plugin` commands above afterward.
    failing `Bash` commands) — the third tool call should be denied by
    `guard-loop.sh`.
 
+## Measuring token savings
+
+`bench/` has a deterministic, no-API-calls estimator plus the tooling to
+measure real session transcripts when you want an exact number instead of
+an estimate. See [`bench/README.md`](bench/README.md).
+
+```bash
+python3 bench/estimate_savings.py
+```
+
 ## Directory layout
 
 ```
@@ -171,6 +181,11 @@ lolo-token-optimizer/
 ├── skills/
 │   └── token-optimizer/
 │       └── SKILL.md          # manually-invocable compression checklist
+├── bench/
+│   ├── README.md             # methodology: synthetic estimate vs real-session diff
+│   ├── estimate_savings.py   # synthetic, deterministic token-savings estimator
+│   ├── extract_usage.py      # parses real Claude Code session .jsonl transcripts
+│   └── fixtures/             # sample files/log/failed-attempt used by the estimator
 ├── cli.sh                    # manual diagnostics (status/reset), not a slash command
 ├── install.sh                # copies the plugin into ~/.claude/plugins/
 └── README.md

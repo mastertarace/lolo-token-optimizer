@@ -1,0 +1,20 @@
+[
+  {
+    "file": "large_log.txt",
+    "grep_pattern": "ERROR",
+    "grep_flags": ["-n"],
+    "rationale": "A real agent investigating a log wouldn't read it whole; it would grep for the level it cares about."
+  },
+  {
+    "file": "large_source.py",
+    "grep_pattern": "^def ",
+    "grep_flags": ["-n"],
+    "rationale": "A real agent looking for a function in a big module greps definitions instead of reading the whole file."
+  },
+  {
+    "file": "small_config.py",
+    "grep_pattern": "FEATURE_FLAGS",
+    "grep_flags": ["-n"],
+    "rationale": "Included as a control case: this file is under maxFileTokenLimit, so the hook never fires and there is nothing to save."
+  }
+]
