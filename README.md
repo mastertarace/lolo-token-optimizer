@@ -5,6 +5,17 @@ compression rules before subagent delegation, blocking raw reads of
 oversized files, and cutting off subagents that loop on repeated tool
 failures.
 
+> **Measured: ~91% fewer tokens on the bench fixture set** (~30,926 -> ~2,806
+> tokens; ~28,120 saved) by blocking raw large-file reads in favor of
+> targeted `grep` and cutting a repeated-failure retry loop short. Free,
+> deterministic, reproducible in one command:
+> ```bash
+> python3 bench/estimate_savings.py
+> ```
+> Full numbers and methodology (what's measured vs. assumed, and how to get
+> an exact figure from real sessions): [`bench/README.md`](bench/README.md) ·
+> [`bench/report.html`](bench/report.html).
+
 ## Install (from GitHub)
 
 Inside a Claude Code session, run:
