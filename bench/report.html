@@ -1,0 +1,516 @@
+<!doctype html>
+<!--
+  Static snapshot of a `python3 bench/estimate_savings.py` run. Numbers are
+  frozen at generation time -- re-run the script and regenerate this file
+  (or just trust the live script output) rather than editing figures here.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Savings Bench</title>
+<style>
+  :root {
+    --paper:        #f6f6f2;
+    --surface:      #fdfdfb;
+    --ink:          #14181d;
+    --ink-2:        #52514e;
+    --ink-3:        #898781;
+    --line:         #e1e0d9;
+    --line-strong:  #c3c2b7;
+    --plugin:       #2a78d6;   /* categorical slot 1 (blue) — "with plugin" */
+    --plugin-tint:  #cde2fb;
+    --baseline:     #eb6834;   /* categorical slot 2 (orange) — "baseline" */
+    --baseline-tint:#fbdcc9;
+    --good:         #006300;
+    --focus:        #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:        #0d0d0d;
+      --surface:      #17191c;
+      --ink:          #f5f5f2;
+      --ink-2:        #c3c2b7;
+      --ink-3:        #898781;
+      --line:         #2c2c2a;
+      --line-strong:  #383835;
+      --plugin:       #3987e5;
+      --plugin-tint:  #163257;
+      --baseline:     #d95926;
+      --baseline-tint:#4a2712;
+      --good:         #0ca30c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:        #0d0d0d;
+    --surface:      #17191c;
+    --ink:          #f5f5f2;
+    --ink-2:        #c3c2b7;
+    --ink-3:        #898781;
+    --line:         #2c2c2a;
+    --line-strong:  #383835;
+    --plugin:       #3987e5;
+    --plugin-tint:  #163257;
+    --baseline:     #d95926;
+    --baseline-tint:#4a2712;
+    --good:         #0ca30c;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    padding: 4rem 1.5rem 6rem;
+  }
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+  h1, h2, h3 {
+    font-family: "Fraunces", Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    text-wrap: balance;
+    margin: 0;
+  }
+  .mono {
+    font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  /* ---- header ---- */
+  header { display: flex; flex-direction: column; gap: 1rem; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--plugin);
+  }
+  h1 { font-size: clamp(2rem, 5vw, 2.6rem); }
+  .dek {
+    color: var(--ink-2);
+    font-size: 1.02rem;
+    max-width: 62ch;
+  }
+  .settings-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.6rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .settings-strip div {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+  .settings-strip b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ---- legend ---- */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+  .swatch.baseline { background: var(--baseline); }
+  .swatch.plugin { background: var(--plugin); }
+
+  /* ---- hero stat ---- */
+  .hero {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 2.25rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .hero-figure {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+  .hero-figure .num {
+    font-size: clamp(3rem, 9vw, 4.2rem);
+    font-weight: 700;
+    color: var(--good);
+    line-height: 1;
+  }
+  .hero-figure .label {
+    font-size: 1.05rem;
+    color: var(--ink-2);
+    max-width: 32ch;
+  }
+  .hero-sub {
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .hero-sub b { color: var(--ink); font-weight: 600; }
+
+  .compare-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .compare-track {
+    position: relative;
+    height: 34px;
+    background: var(--baseline-tint);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .compare-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--plugin);
+    border-radius: 6px;
+  }
+  .compare-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--ink-2);
+  }
+
+  /* ---- section ---- */
+  section { display: flex; flex-direction: column; gap: 1.25rem; }
+  .section-head { display: flex; flex-direction: column; gap: 0.3rem; }
+  .section-head h2 { font-size: 1.35rem; }
+  .section-head p { margin: 0; color: var(--ink-2); font-size: 0.92rem; max-width: 60ch; }
+
+  /* ---- fixture rows (scenario 1) ---- */
+  .fixture {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .fixture.control { opacity: 0.72; }
+  .fixture-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .fixture-name { font-weight: 600; font-size: 0.95rem; }
+  .fixture-note { font-size: 0.78rem; color: var(--ink-3); }
+  .fixture-saved {
+    font-size: 0.85rem;
+    color: var(--good);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .rowbars { display: flex; flex-direction: column; gap: 0.4rem; }
+  .rowbar { display: flex; align-items: center; gap: 0.6rem; }
+  .rowbar .tag {
+    width: 78px;
+    flex: none;
+    font-size: 0.72rem;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .rowbar .track {
+    flex: 1;
+    height: 16px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .rowbar .fill { height: 100%; border-radius: 4px; }
+  .rowbar.baseline .fill { background: var(--baseline); }
+  .rowbar.plugin .fill { background: var(--plugin); }
+  .rowbar .val {
+    width: 74px;
+    flex: none;
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--ink);
+  }
+  .fixture-detail {
+    font-size: 0.78rem;
+    color: var(--ink-3);
+  }
+  .fixture-detail code {
+    font-family: "IBM Plex Mono", monospace;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.05rem 0.35rem;
+  }
+
+  /* ---- scenario 2 tally ---- */
+  .loop-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.25rem 1.25rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .loop-row { display: flex; flex-direction: column; gap: 0.5rem; }
+  .loop-row-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+  .loop-row-head b { color: var(--ink); }
+  .blocks { display: flex; gap: 5px; align-items: flex-end; }
+  .block {
+    height: 26px;
+    width: 26px;
+    border-radius: 5px;
+    flex: none;
+  }
+  .block.attempt { background: var(--baseline); }
+  .block.attempt.ghost {
+    background: transparent;
+    border: 1.5px dashed var(--baseline);
+  }
+  .block.deny {
+    background: var(--plugin);
+    height: 10px;
+    align-self: center;
+  }
+  .loop-caption { font-size: 0.76rem; color: var(--ink-3); }
+
+  /* ---- methodology ---- */
+  .method {
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .method h3 { font-size: 1rem; }
+  .method ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--ink-2);
+    font-size: 0.86rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .cmd {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.82rem;
+    color: var(--ink);
+    overflow-x: auto;
+  }
+
+  footer {
+    font-size: 0.78rem;
+    color: var(--ink-3);
+    text-align: center;
+  }
+
+  a { color: var(--plugin); }
+  a:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .compare-fill, .rowbar .fill { transition: width 0.6s ease; }
+  }
+</style>
+</head>
+<body>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="page">
+
+  <header>
+    <div class="eyebrow">lolo-token-optimizer — bench/estimate_savings.py</div>
+    <h1>Token Savings Bench</h1>
+    <p class="dek">
+      A deterministic, offline estimate of what the plugin's two token-saving
+      hooks avoid — <span class="mono">check-file-size.sh</span> and the sticky
+      <span class="mono">guard-loop.sh</span> — run against the fixtures in
+      <span class="mono">bench/fixtures/</span>. Every figure below is either a
+      real measurement (file size on disk, real <span class="mono">grep</span>
+      output) or a stated assumption, never invented.
+    </p>
+    <div class="settings-strip mono">
+      <div>maxFileTokenLimit <b class="tnum">10,000</b> tok</div>
+      <div>maxToolRetriesBeforeAbort <b class="tnum">2</b></div>
+      <div>~4 bytes / token (plugin's own approximation)</div>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span><i class="swatch baseline"></i>baseline — no plugin</span>
+    <span><i class="swatch plugin"></i>with plugin</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-figure">
+      <span class="num tnum">90.9%</span>
+      <span class="label">fewer tokens across both scenarios, on this fixture set</span>
+    </div>
+    <div class="compare-bar">
+      <div class="compare-track">
+        <div class="compare-fill" style="width: 9.1%;"></div>
+      </div>
+      <div class="compare-labels mono">
+        <span>with plugin: <b class="tnum">~2,806</b> tok</span>
+        <span>baseline: <b class="tnum">~30,926</b> tok</span>
+      </div>
+    </div>
+    <p class="hero-sub">
+      <b class="tnum">~28,120</b> tokens saved combining the file-size guard
+      (three fixture files) and the sticky loop guard (one simulated retry
+      loop). See <a href="#method">methodology</a> for what that number does
+      and doesn't claim.
+    </p>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Scenario 1 — raw file read blocked</h2>
+      <p>
+        <span class="mono">check-file-size.sh</span> denies a <span class="mono">Read</span>
+        over the token limit, so the agent greps for what it actually needs instead
+        of loading the whole file. Bars are each fixture's own baseline read, to scale.
+      </p>
+    </div>
+
+    <div class="fixture">
+      <div class="fixture-top">
+        <span class="fixture-name mono">large_log.txt</span>
+        <span class="fixture-saved tnum">saved ~16,154 tok · 93.2%</span>
+      </div>
+      <div class="rowbars">
+        <div class="rowbar baseline">
+          <span class="tag">baseline</span>
+          <div class="track"><div class="fill" style="width: 100%;"></div></div>
+          <span class="val tnum">~17,337</span>
+        </div>
+        <div class="rowbar plugin">
+          <span class="tag">with plugin</span>
+          <div class="track"><div class="fill" style="width: 6.8%;"></div></div>
+          <span class="val tnum">~1,182</span>
+        </div>
+      </div>
+      <div class="fixture-detail">
+        69,347-byte app log. Deny message (~34 tok) + <code>grep -n ERROR</code> output (~1,148 tok, 49 matching lines).
+      </div>
+    </div>
+
+    <div class="fixture">
+      <div class="fixture-top">
+        <span class="fixture-name mono">large_source.py</span>
+        <span class="fixture-saved tnum">saved ~11,759 tok · 90.8%</span>
+      </div>
+      <div class="rowbars">
+        <div class="rowbar baseline">
+          <span class="tag">baseline</span>
+          <div class="track"><div class="fill" style="width: 100%;"></div></div>
+          <span class="val tnum">~12,946</span>
+        </div>
+        <div class="rowbar plugin">
+          <span class="tag">with plugin</span>
+          <div class="track"><div class="fill" style="width: 9.2%;"></div></div>
+          <span class="val tnum">~1,187</span>
+        </div>
+      </div>
+      <div class="fixture-detail">
+        51,785-byte module, 120 handlers. Deny message (~34 tok) + <code>grep -n '^def '</code> output (~1,152 tok, 120 signatures).
+      </div>
+    </div>
+
+    <div class="fixture control">
+      <div class="fixture-top">
+        <span class="fixture-name mono">small_config.py</span>
+        <span class="fixture-note">control — under the limit, hook never fires</span>
+      </div>
+      <div class="rowbars">
+        <div class="rowbar baseline">
+          <span class="tag">baseline</span>
+          <div class="track"><div class="fill" style="width: 100%; background: var(--ink-3);"></div></div>
+          <span class="val tnum">~95</span>
+        </div>
+      </div>
+      <div class="fixture-detail">No change with or without the plugin — included so the guard's false-positive rate has a visible zero case.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Scenario 2 — retry loop cut off</h2>
+      <p>
+        Priced from a real 91-token failed-attempt transcript. Assumes a subagent
+        would blindly retry <b class="tnum">6</b> times without the guard
+        (override with <span class="mono">--baseline-retries</span>) — the
+        sticky <span class="mono">guard-loop.sh</span> lets the first
+        <b class="tnum">2</b> attempts through, then denies every one after.
+      </p>
+    </div>
+    <div class="loop-card">
+      <div class="loop-row">
+        <div class="loop-row-head"><span>baseline</span><b class="tnum">6 × ~91 tok = ~548 tok</b></div>
+        <div class="blocks">
+          <div class="block attempt" title="attempt 1 — ~91 tok"></div>
+          <div class="block attempt" title="attempt 2 — ~91 tok"></div>
+          <div class="block attempt" title="attempt 3 — ~91 tok"></div>
+          <div class="block attempt" title="attempt 4 — ~91 tok"></div>
+          <div class="block attempt" title="attempt 5 — ~91 tok"></div>
+          <div class="block attempt" title="attempt 6 — ~91 tok"></div>
+        </div>
+      </div>
+      <div class="loop-row">
+        <div class="loop-row-head"><span>with plugin</span><b class="tnum">2 × ~91 + 4 × ~40 tok = ~342 tok</b></div>
+        <div class="blocks">
+          <div class="block attempt" title="attempt 1 — ~91 tok"></div>
+          <div class="block attempt" title="attempt 2 — ~91 tok (threshold reached)"></div>
+          <div class="block deny" title="sticky denial — ~40 tok"></div>
+          <div class="block deny" title="sticky denial — ~40 tok"></div>
+          <div class="block deny" title="sticky denial — ~40 tok"></div>
+          <div class="block deny" title="sticky denial — ~40 tok"></div>
+        </div>
+      </div>
+      <p class="loop-caption">Each large block ≈ one real failed attempt (~91 tok). Each small block ≈ one sticky deny message (~40 tok) — the plugin still pays for the attempts up to the threshold; only the pointless retries after it get cheap.</p>
+    </div>
+  </section>
+
+  <div class="method" id="method">
+    <h3>Methodology &amp; caveats</h3>
+    <ul>
+      <li>Token counts use <span class="mono">~4 bytes/token</span> — the same approximation <span class="mono">hooks/scripts/lib.sh</span> uses at runtime, not a real tokenizer's exact count.</li>
+      <li>Scenario 2's baseline retry count (6) is a stated assumption, overridable with <span class="mono">--baseline-retries</span> — not a measurement.</li>
+      <li>These numbers describe this fixture set, not a general claim about all sessions.</li>
+      <li>For an exact number instead of an estimate, diff real session transcripts — see <span class="mono">bench/README.md</span> and <span class="mono">bench/extract_usage.py</span>.</li>
+    </ul>
+    <div class="cmd mono">python3 bench/estimate_savings.py --baseline-retries 6</div>
+  </div>
+
+  <footer>lolo-token-optimizer v2.2.0 · bench run on the fixtures in <span class="mono">bench/fixtures/</span></footer>
+
+</div>
+</body>
+</html>

@@ -28,6 +28,11 @@ What it measures, and how:
   `--baseline-retries`, default 6) against `maxToolRetriesBeforeAbort` real
   attempts plus cheap sticky denials for the rest.
 
+`report.html` is a static, standalone snapshot of one run of the script
+above, laid out as a readable page (open it directly in a browser). It's
+frozen at generation time — re-run the script for current numbers rather
+than editing figures in the HTML.
+
 Every number is either a real measurement (file size, grep output size) or
 an explicitly labeled assumption (`--baseline-retries`). Token counts use
 the plugin's own approximation, ~4 bytes/token — the same one
