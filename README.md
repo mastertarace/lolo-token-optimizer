@@ -12,6 +12,10 @@ Which gives:
 
 `~/.claude/skills/lolo-token-optimizer/SKILL.md`
 
+### Automatic installation
+
+Simply ask your Claude: "Demander à votre Claude d'installer lui-même ce Skill" 😉
+
 ## Usage
 
 Manual invocation:
@@ -84,3 +88,4 @@ The skill always looks for the cheapest strategy that still yields a reliable re
 
 - 2026-08-25: Added configurable subagent effort levels (low/medium/high) per role.
 - 2026-08-25: Added detailed "How it works" section describing the full delegation logic.
+- 2026-08-25: Added an "Automatic installation" step to the Installation section.
