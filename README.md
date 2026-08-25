@@ -14,7 +14,7 @@ Which gives:
 
 ### Automatic installation
 
-Simply ask your Claude: "Demander à votre Claude d'installer lui-même ce Skill" 😉
+Ask your Claude to install this Skill itself 😉
 
 ## Usage
 
