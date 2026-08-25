@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "lolo-token-optimizer",
+  "displayName": "LoLo Token Optimizer v2",
+  "version": "2.2.0",
+  "description": "Dynamically optimizes token usage, blocks raw reads of oversized files, and cuts off subagent retry loops after repeated failures.",
+  "settings": {
+    "defaultEffort": "low",
+    "maxFileTokenLimit": 10000,
+    "maxToolRetriesBeforeAbort": 2
+  }
+}
