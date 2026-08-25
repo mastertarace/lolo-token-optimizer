@@ -9,14 +9,18 @@ failures.
 
 - Claude Code with plugin support (hooks + skills).
 - `bash`.
-- `jq` **strongly recommended**. Without it:
-  - context-injection hooks (`InstructionsLoaded`, `SubagentStart`) silently
-    do nothing (no JSON output is produced), so the compression reminder is
-    not injected.
-  - settings are read from `plugin.json` with a plain fallback default
-    instead of the real configured value.
-  - Install `jq` (`apt install jq`, `brew install jq`, ...) to get full
-    behavior.
+
+Nothing else to install and nothing to configure: every hook script picks
+its own JSON backend automatically, in this order:
+
+1. `jq`, if present (fastest).
+2. `python3`, if `jq` is missing — present on virtually every dev machine,
+   so this is the realistic zero-config default.
+3. A `grep`/`sed` best-effort for flat fields, only if neither exists.
+
+All three paths implement the same behavior (read settings, read hook
+fields, emit deny/context JSON), so the plugin is fully functional right
+after `install.sh` with no package to install and no setting to touch.
 
 ## What it actually does
 

@@ -4,7 +4,7 @@
 # (grep/sed/awk) instead.
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
-file_path=$(json_nested_field '.tool_input.file_path')
+file_path=$(json_path_field 'tool_input.file_path')
 [[ -z "$file_path" ]] && exit 0
 [[ -f "$file_path" ]] || exit 0
 
