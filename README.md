@@ -1,3 +1,5 @@
+**English · [Français](README.fr.md)**
+
 # LoLo Token Optimizer v2
 
 A Claude Code plugin that reduces token/cost overhead by enforcing
