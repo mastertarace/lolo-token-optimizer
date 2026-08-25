@@ -11,7 +11,6 @@ count=0
 [[ -f "$counter_file" ]] && count=$(cat "$counter_file" 2>/dev/null || echo 0)
 
 if (( count >= max_retries )); then
-  rm -f "$counter_file" 2>/dev/null
   deny_tool "Error loop detected (${count} consecutive failures, limit ${max_retries}). Task handed back: stop this approach and report a condensed error to the main model instead of retrying."
 fi
 

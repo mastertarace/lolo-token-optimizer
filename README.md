@@ -47,7 +47,7 @@ shell scripts triggered by Claude Code hook events.
 | `InstructionsLoaded` | `inject-compression-rules.sh` | Injects a short reminder of the compression rules (mission <= 15 words, context <= 120 tokens, prefer a lightweight model) into the conversation context. |
 | `SubagentStart` | `subagent-start-context.sh` | Injects a compact-answering instruction into the subagent's own context when it starts. |
 | `PreToolUse` (matcher `Read`) | `check-file-size.sh` | Estimates the target file's size in tokens (~4 bytes/token) against `maxFileTokenLimit`; denies the read with a message suggesting `grep`/`sed`/`awk` or a ranged read if it's over the limit. |
-| `PreToolUse` (matcher `*`) | `guard-loop.sh` | Before any tool call, checks the consecutive-failure counter for the current session+agent; denies the call and resets the counter if it has reached `maxToolRetriesBeforeAbort`. |
+| `PreToolUse` (matcher `*`) | `guard-loop.sh` | Before any tool call, checks the consecutive-failure counter for the current session+agent; if it has reached `maxToolRetriesBeforeAbort`, denies the call. This is sticky: the counter is only cleared by a success or by session/subagent end, so every further tool call is denied too, not just the one that tripped the threshold. |
 | `PostToolUseFailure` (matcher `*`) | `track-tool-failure.sh` | Increments the consecutive-failure counter. |
 | `PostToolUse` (matcher `*`) | `reset-failure-counter.sh` | Clears the counter as soon as a tool call succeeds. |
 | `SubagentStop` / `Stop` | `reset-failure-counter.sh` | Clears any leftover counter when a subagent or the session ends. |
@@ -59,11 +59,14 @@ isn't set), one file per `session_id` + `agent_id` pair.
 ### Important limitation: there is no real "kill subagent" action
 
 Claude Code's hook system does not expose an action that terminates a
-running subagent outright. `guard-loop.sh` approximates the plugin's goal
-("cut off looping subagents") by **denying the next tool call** once the
-failure threshold is hit, forcing the agent to stop that approach and
-report back instead of retrying indefinitely. It does not forcibly end the
-subagent's turn.
+running subagent outright — no hook action type, CLI command, or OS-level
+handle to end it from outside. `guard-loop.sh` approximates the plugin's
+goal ("cut off looping subagents") by **denying every tool call** once the
+failure threshold is hit — not just the next one, but all of them, sticky,
+until a tool call succeeds or the subagent/session ends. In practice this
+starves the agent of tools, so it can only keep answering in plain text and
+naturally wraps up its turn — but it is not a forced termination, and
+nothing stops it from producing more text output while starved.
 
 ### Settings (`.claude-plugin/plugin.json`)
 
