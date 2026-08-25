@@ -25,3 +25,4 @@ The skill can also be loaded automatically by Claude Code when its description m
 - Haiku: exploration, research, simple analysis, verification.
 - Main model: architecture, decisions, complex implementation, difficult debugging, final validation.
 - No subagent if the main model already has the context and delegation would cost more than it saves.
+- Subagent reasoning effort (low/medium/high) is configurable per role in the effort table in `SKILL.md`.

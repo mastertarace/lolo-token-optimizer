@@ -23,6 +23,24 @@ Edit this table to change the displayed name of the subagents. The skill uses th
 | Verification/testing | Larbin Inspector |
 | Targeted debugging | Larbin Intello |
 
+## Subagent effort configuration
+
+Edit this table to change the reasoning effort used for each subagent role. Pass this value as the subagent's effort/reasoning parameter (e.g. `reasoning_effort`) when launching it.
+
+| Role | Effort level |
+|---|---|
+| Exploration/research (Larbin Scout) | low |
+| Verification/testing (Larbin Inspector) | low |
+| Targeted debugging (Larbin Intello) | medium |
+
+Guidelines for picking a level:
+
+- **low**: pure lookup/search, mechanical checks, single-file scans, short factual answers.
+- **medium**: log/error analysis requiring some correlation, multi-file comparison, test result interpretation, debugging with more than one plausible cause.
+- **high**: rare for a delegated subtask — only when the subtask itself requires nontrivial reasoning but must still stay off the main model (e.g. large-scale cross-file pattern analysis). If a subtask seems to need high effort, reconsider whether it should stay on the main model instead.
+
+Never raise a subagent's effort level as a substitute for keeping the task on the main model when the decision rule above says to keep it there.
+
 ## Decision rule
 
 Before delegating, classify the subtask:
