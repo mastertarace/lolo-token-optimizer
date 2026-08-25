@@ -230,3 +230,26 @@ This skill can also be invoked with:
 If arguments are provided, use them as additional context to determine the strategy:
 
 `$ARGUMENTS`
+
+### Configuration subcommands
+
+These subcommands edit `SKILL.md`'s own configuration tables (name table and effort table above) instead of running a delegation. `SUBAGENT_TYPE` is one of the three roles: `Exploration/research`, `Verification/testing`, `Targeted debugging`.
+
+**Rename a subagent:**
+
+`/lolo-token-optimizer SubagentName SUBAGENT_TYPE SUBAGENT_NAME`
+
+- Find the row for `SUBAGENT_TYPE` in the name table and replace its display name with `SUBAGENT_NAME`.
+- Also update every occurrence of the old display name elsewhere in `SKILL.md` (e.g. in the effort table's row labels) so the file stays consistent.
+- If `SUBAGENT_TYPE` doesn't match a known role, ask the user to pick one instead of guessing.
+
+**Set an effort level:**
+
+`/lolo-token-optimizer AllsSubagentEffortlevel SUBAGENT_TYPE EFFORT_LEVEL`
+`/lolo-token-optimizer AllsSubagentEffortlevel SUBAGENT_NAME EFFORT_LEVEL`
+
+- `EFFORT_LEVEL` must be `low`, `medium`, or `high` (case-insensitive; normalize to lowercase in the table).
+- Resolve the target row either by `SUBAGENT_TYPE` (matches the Role column) or by `SUBAGENT_NAME` (matches the current display name, e.g. `Larbin Scout`) in the effort table, then update that row's effort level.
+- If the given name/type matches no row, ask the user to clarify instead of guessing.
+
+After either subcommand, save the edit to `SKILL.md` and confirm the change in one short line (e.g. `✓ Larbin Scout effort set to medium`).

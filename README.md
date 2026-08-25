@@ -24,6 +24,14 @@ Manual invocation:
 
 The skill can also be loaded automatically by Claude Code when its description matches the task.
 
+Configuration subcommands:
+
+- `/lolo-token-optimizer SubagentName SUBAGENT_TYPE SUBAGENT_NAME` — rename a subagent role's display name.
+- `/lolo-token-optimizer AllsSubagentEffortlevel SUBAGENT_TYPE EFFORT_LEVEL` — set a role's effort level (`low`/`medium`/`high`) by role type.
+- `/lolo-token-optimizer AllsSubagentEffortlevel SUBAGENT_NAME EFFORT_LEVEL` — same, but targeting the role by its current display name.
+
+`SUBAGENT_TYPE` is one of `Exploration/research`, `Verification/testing`, `Targeted debugging`. See the configuration tables in `SKILL.md` for details.
+
 ## Principle
 
 - Haiku: exploration, research, simple analysis, verification.
@@ -89,3 +97,4 @@ The skill always looks for the cheapest strategy that still yields a reliable re
 - 2026-08-25: Added configurable subagent effort levels (low/medium/high) per role.
 - 2026-08-25: Added detailed "How it works" section describing the full delegation logic.
 - 2026-08-25: Added an "Automatic installation" step to the Installation section.
+- 2026-08-25: Added `/lolo-token-optimizer SubagentName ...` and `/lolo-token-optimizer AllsSubagentEffortlevel ...` subcommands to rename subagents and set their effort level from the chat.
