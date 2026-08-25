@@ -98,3 +98,4 @@ The skill always looks for the cheapest strategy that still yields a reliable re
 - 2026-08-25: Added detailed "How it works" section describing the full delegation logic.
 - 2026-08-25: Added an "Automatic installation" step to the Installation section.
 - 2026-08-25: Added `/lolo-token-optimizer SubagentName ...` and `/lolo-token-optimizer AllsSubagentEffortlevel ...` subcommands to rename subagents and set their effort level from the chat.
+- 2026-08-25: Bare `/lolo-token-optimizer` (no arguments) now displays a help block listing the subcommands, an example, and the valid `SUBAGENT_TYPE`/`EFFORT_LEVEL` values.

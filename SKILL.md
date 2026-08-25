@@ -231,6 +231,27 @@ If arguments are provided, use them as additional context to determine the strat
 
 `$ARGUMENTS`
 
+**If `$ARGUMENTS` is empty** (bare `/lolo-token-optimizer` call), do not treat it as a task. Instead, display this help block as-is, then stop and wait for the next instruction:
+
+```
+Token Optimizer — configuration subcommands
+
+  /lolo-token-optimizer SubagentName SUBAGENT_TYPE SUBAGENT_NAME
+      Rename a subagent role's display name.
+      Example: /lolo-token-optimizer SubagentName "Exploration/research" "Larbin Scout"
+
+  /lolo-token-optimizer AllsSubagentEffortlevel SUBAGENT_TYPE EFFORT_LEVEL
+  /lolo-token-optimizer AllsSubagentEffortlevel SUBAGENT_NAME EFFORT_LEVEL
+      Set a role's reasoning effort. Target by role type or by current display name.
+      Example: /lolo-token-optimizer AllsSubagentEffortlevel "Larbin Scout" medium
+      Example: /lolo-token-optimizer AllsSubagentEffortlevel "Targeted debugging" high
+
+  SUBAGENT_TYPE options: Exploration/research | Verification/testing | Targeted debugging
+  EFFORT_LEVEL options:   low | medium | high
+
+Current configuration: see the name and effort tables in SKILL.md.
+```
+
 ### Configuration subcommands
 
 These subcommands edit `SKILL.md`'s own configuration tables (name table and effort table above) instead of running a delegation. `SUBAGENT_TYPE` is one of the three roles: `Exploration/research`, `Verification/testing`, `Targeted debugging`.
