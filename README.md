@@ -5,6 +5,19 @@ compression rules before subagent delegation, blocking raw reads of
 oversized files, and cutting off subagents that loop on repeated tool
 failures.
 
+## Install (from GitHub)
+
+Inside a Claude Code session, run:
+
+```
+/plugin marketplace add mastertarace/lolo-token-optimizer
+/plugin install lolo-token-optimizer
+```
+
+That's it — no download, no dependency to install, no setting to touch.
+Full details and alternative install methods (local clone, quick
+`--plugin-dir` testing) are in [Installation](#installation) below.
+
 ## Requirements
 
 - Claude Code with plugin support (hooks + skills).
